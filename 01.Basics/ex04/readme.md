@@ -34,7 +34,7 @@
 
 5. Landing
 
-    public/index.html 
+    public/index.html
 
 6. Application
 
