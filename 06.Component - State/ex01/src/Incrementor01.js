@@ -8,11 +8,11 @@ export default class extends Component {
     render() {
         return (
             <div>
-                <button>{'+'}</button>
+                <button onClick={this.props.onPlus}>{'+'}</button>
                 {' '}
-                { 0 }
+                {this.props.value}
                 {' '}
-                <button>{'-'}</button>
+                <button onClick={this.props.onMinus}>{'-'}</button>
             </div>
         );
     }

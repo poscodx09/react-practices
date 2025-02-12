@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-function Incrementor02() {
+function Incrementor02({onMinus, onPlus, value}) {
+
+
     return (
         <div>
-            <button>{'+'}</button>
+            <button onClick={onPlus}>{'+'}</button>
             {' '}
-            { 0 }
+            {value}
             {' '}
-            <button>{'-'}</button>
+            <button onClick={onMinus}>{'-'}</button>
         </div>
     );
 }
