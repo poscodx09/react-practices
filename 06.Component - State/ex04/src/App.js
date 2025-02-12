@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Modal from "react-modal";
 import ReactModal from "react-modal";
 import * as styles from './modal.scss';
@@ -6,6 +6,11 @@ import * as styles from './modal.scss';
 ReactModal.setAppElement('body');
 
 export default function App() {
+    const[modal01Open, setModal01Open] = useState(false);
+    const[modal02Open, setModal02Open] = useState(false);
+    const[modal03Open, setModal03Open] = useState(false);
+    const[modal04Open, setModal04Open] = useState(false);
+    const[modal05Open, setModal05Open] = useState(false);
 
     return (
         <>
@@ -51,11 +56,11 @@ export default function App() {
 
 
             {/* example modal04: Using inline styles */}
-            <button>modal04</button>
+            <button onClick={() => setModal04Open(true)}>modal04</button>
             <br/><br/>
 
             <Modal
-                isOpen={false}
+                isOpen={modal04Open}
                 contentLabel="modal04 example">
                 <h1>modal04</h1>
                 <button>
@@ -65,11 +70,11 @@ export default function App() {
 
 
             {/* example modal04: Using CSS/SASS styles */}
-            <button>modal05</button>
+            <button onClick={() => setModal05Open(true)}>modal05</button>
             <br/><br/>
 
             <Modal
-                isOpen={false}
+                isOpen={modal05Open}
                 className={styles.Modal}
                 overlayClassName={styles.Overlay}
                 style={{content: {width: 350}}}
@@ -79,8 +84,8 @@ export default function App() {
                     하하하하하하하~
                 </div>
                 <div className={ styles['modal-dialog-buttons'] }>
-                    <button>확인</button>
-                    <button>취소</button>
+                    <button onClick={() => setModal05Open(false)}>확인</button>
+                    <button onClick={() => setModal05Open(false)}>취소</button>
                 </div>
             </Modal>
         </>

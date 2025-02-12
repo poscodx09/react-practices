@@ -1,15 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './assets/Form.css';
 
 export default function Form() {
+    const [name, setName] = useState("");
+    
     return (
         <form id="joinForm" name="joinForm" method="post" action="/do/not/post">
             <label htmlFor="name">이름</label>
             <input
+                value={name}
                 id="name"
                 name="name"
                 type="text"
-                autoComplete="off" />
+                autoComplete="off"
+                onChange={(e)=> setName(e.target.value)}
+                />
 
             <label htmlFor="email">이메일</label>
             <input
