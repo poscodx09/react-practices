@@ -5,7 +5,7 @@ function TabItem(props) {
     const {no, name, active, contents} = props;
 
     return (
-        <li className={Tab_Item}>{name}</li>
+        <li className={[Tab_Item, (active ? 'active' : '')].join(' ')}>{name}</li>
     )
 }
 
