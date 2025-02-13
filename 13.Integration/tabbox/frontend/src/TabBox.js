@@ -7,18 +7,16 @@ import {Tab_Box} from './assets/scss/TabBox.scss';
 function TabBox() {
 
   const [selectedContent, setSelectedContent] = useState("");
-  const [tabs, setTabs] = useState([...data]);
+  const [tabs, setTabs] = useState(data);
 
   const handleSelectedTab = (no) => {
-    const copiedData = [...data];
-    const newData = copiedData.map((item) => {
-      if (item.no === no){
-        item.active = true;
-        setSelectedContent(item.contents);
-      }
-      return item;
+    const newData = tabs.map((item) => {
+        item.active = (item.no === no);
+        if (item.no === no){
+          setSelectedContent(item.contents);
+        }
+        return item;
     });
-
     setTabs(newData);
   }
 
