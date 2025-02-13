@@ -1,10 +1,13 @@
 import React from 'react';
 import {Tab_View} from './assets/scss/TabView.scss';
 
-function TabView() {
+function TabView({data, selectTab}) {
+
+  const selectedContents = data.filter((item) => item.no === selectTab);
+
   return (
     <div className={Tab_View}>
-            탭뷰입니다.
+            {selectedContents && selectedContents[0]?.contents}
     </div>
   )
 }

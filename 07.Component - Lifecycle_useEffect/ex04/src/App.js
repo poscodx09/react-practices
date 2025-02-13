@@ -18,9 +18,14 @@ export default function App() {
     };
 
     useEffect(() => {
-        setInterval(() => {
+        const IntervalId = setInterval(() => {
             setCurrentTime(getCurrentTime());
         }, 1000);
+
+        return () => {
+            console.log('Interval');
+            clearInterval(IntervalId);
+        }
     }, []);
 
     useEffect(() => {
