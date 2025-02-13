@@ -23,10 +23,10 @@ function KanbanBoard() {
     }
 
     // task 삭제
-    const handleDeleteTask = (cardNo, no) => {
+    const handleDeleteTask = (cardNo, taskNo) => {
         const deletedCards = cards.map((item) => {
             if (item.no === cardNo){
-                item.tasks = item.tasks.filter((task) => task.no !== no);
+                item.tasks = item.tasks.filter((task) => task.no !== taskNo);
                 return item;
             }
             return item;
@@ -34,11 +34,31 @@ function KanbanBoard() {
         setCards(deletedCards);
     }
 
+    // task done 처리
+    const handleCheckBox = (cardNo, taskNo) => {
+        const changedCards = cards.map((item) => {
+            if (item.no === cardNo){
+                item.tasks = item.tasks.map((task) => {
+                    if (task.no === taskNo){
+                        task.done = !task.done;
+                        return task;
+                    }
+                    return task;
+                });
+                return item;
+            }
+            return item;
+        });
+
+        console.log()
+        setCards(changedCards);
+    }
+
     return (
         <>
-            <CardList title="To Do" cards={toDos} handleAddTask={handleAddTask} handleDeleteTask={handleDeleteTask}/>
-            <CardList title="Doing" cards={doings} handleAddTask={handleAddTask} handleDeleteTask={handleDeleteTask}/>
-            <CardList title="Done" cards={dones} handleAddTask={handleAddTask} handleDeleteTask={handleDeleteTask}/>
+            <CardList title="To Do" cards={toDos} handleAddTask={handleAddTask} handleDeleteTask={handleDeleteTask} handleCheckBox={handleCheckBox}/>
+            <CardList title="Doing" cards={doings} handleAddTask={handleAddTask} handleDeleteTask={handleDeleteTask} handleCheckBox={handleCheckBox}/>
+            <CardList title="Done" cards={dones} handleAddTask={handleAddTask} handleDeleteTask={handleDeleteTask} handleCheckBox={handleCheckBox}/>
         </>
     );
 }
