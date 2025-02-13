@@ -50,7 +50,6 @@ function KanbanBoard() {
             return item;
         });
 
-        console.log()
         setCards(changedCards);
     }
 
