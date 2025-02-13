@@ -9,10 +9,19 @@ import data from './assets/json/data.js';
 function App() {
     const [emails, setEmails] = useState(data);
 
+    const searchEmail = (keyword) => {
+        const lowerKeyword = keyword.toLowerCase();
+        const newEmails = data.filter((item) => {
+            const {firstName, lastName, email} = item;
+            return (firstName.toLowerCase()).includes(lowerKeyword) || (lastName.toLowerCase()).includes(lowerKeyword) || (email.toLowerCase()).includes(lowerKeyword);
+        })
+        setEmails(newEmails);
+    }
+
     return (
         <div id={'App'}>
             <RegisterForm />
-            <SearchBar />
+            <SearchBar searchEmail={searchEmail}/>
             <Emaillist emails={emails} />
         </div>
     );
