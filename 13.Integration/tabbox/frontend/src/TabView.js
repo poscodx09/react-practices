@@ -7,7 +7,7 @@ function TabView({data, selectTab}) {
 
   return (
     <div className={Tab_View}>
-            {selectedContents && selectedContents[0]?.contents}
+            {selectedContents.length > 0 && selectedContents[0]?.contents}
     </div>
   )
 }
