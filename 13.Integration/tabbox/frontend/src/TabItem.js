@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import {Tab_Item} from './assets/scss/TabItem.scss';
 
 function TabItem(props) {
-    const {no, name, active, contents, selectTab, setSelectTab} = props;
+    const {no, name, active, setSelectTab} = props;
 
     return (
         <li 
-            className={[Tab_Item, (selectTab === no ? 'active' : '')].join(' ')}
+            className={[Tab_Item, (active ? 'active' : '')].join(' ')}
             onClick={() => setSelectTab(no)}
             >
             {name}

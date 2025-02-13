@@ -1,13 +1,11 @@
 import React from 'react';
 import {Tab_View} from './assets/scss/TabView.scss';
 
-function TabView({data, selectTab}) {
-
-  const selectedContents = data.filter((item) => item.no === selectTab);
+function TabView({content}) {
 
   return (
     <div className={Tab_View}>
-            {selectedContents.length > 0 && selectedContents[0]?.contents}
+            {content}
     </div>
   )
 }
