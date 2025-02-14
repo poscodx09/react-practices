@@ -6,8 +6,8 @@ export default function Card({no, title, description, status, tasks, handleAddTa
     const [open, setOpen] = useState(true);
 
     return (
-    <div className={_Card} key={no} onClick={() => setOpen(!open)}>
-      <div className={[Card_Title, open ? Card_Title_Open : ''].join(' ')}>{title}</div>
+    <div className={_Card} key={no}>
+      <div className={[Card_Title, open ? Card_Title_Open : ''].join(' ')} onClick={() => setOpen(!open)}>{title}</div>
 
       <div className='Card_Details'>
         {description}
