@@ -42,6 +42,14 @@ public class ItemController {
 				.body(JsonResult.success(item));
 	}
 	
+	@GetMapping("/{id}")
+	public ResponseEntity<JsonResult<Item>> read(@PathVariable Long id) {
+		log.info("Request[GET /api/{}]", id);
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(JsonResult.success(items.stream().filter(t -> t.getId() == id).findAny().orElse(null)));
+	}
+	
 	@GetMapping
 	public ResponseEntity<JsonResult<List<Item>>> read() {
 		log.info("Request[GET /api]");

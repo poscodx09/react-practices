@@ -5,8 +5,8 @@ import ReactModal from "react-modal";
 import styled from 'styled-components';
 import './assets/scss/App.scss';
 import * as stylesModal from './assets/scss/Modal.scss';
-// import data from './assets/json/data.js';
 import serialize from 'form-serialize';
+import axios from 'axios';
 
 const CreateForm = styled.form``;
 const UpdateForm = styled.form``;
@@ -19,8 +19,16 @@ ReactModal.setAppElement("body");
 function App() {
     const refCreateForm = useRef(null);
     const [items, setItems] = useState(null);
-    const [modalOpen, setModalOpen] = useState(false);
+    const [modalData, setModalData] = useState({
+        item: {
+            id: '',
+            type: '',
+            name: '',
+            image: null,
+        }
+    })
 
+    // 아이템 추가
     const addItem = async (item) => {
         try{
             const response = await fetch('/item', {
@@ -46,6 +54,7 @@ function App() {
         }
     }
 
+    // 전체 아이템 조회회
     const fetchItems = async () => {
         try{
             const response = await fetch('/item', {
@@ -73,6 +82,34 @@ function App() {
         }
         
     };
+
+    // 아이템 조회
+    const fetchItem = async (id) => {
+        try{
+            const response = await axios.get(`/item/${id}`);
+            const jsonResult = response.data;
+            console.log(jsonResult.data);
+
+            setModalData({
+                open: !modalData.open,
+                item: jsonResult.data
+            })
+        } catch(err){
+            console.log(err.response ? `${err.response.status} ${err.response.data.message}` : err);
+        } 
+    }
+
+    // 아이템 삭제
+    const deleteItem = async (id) => {
+        try{
+            const response = await axios.delete(`/item/${id}`);
+            const jsonResult = response.data;
+            console.log(jsonResult.data);
+            setItems(items.filter((e) => e.id != jsonResult.data));
+        } catch(err){
+            console.log(err.response ? `${err.response.status} ${err.response.data.message}` : err);
+        }
+    }
 
     useEffect(() => {
         fetchItems();
@@ -157,8 +194,8 @@ function App() {
                 {
                     items?.map((item, index) => <Item key={item.id}>
                         <h4>
-                            <b title={'[R]ead (get)'} onClick={() => setModalOpen(!modalOpen)}>{item.name}</b>
-                            <button>{'[D]elete (delete)'}</button>
+                            <b title={'[R]ead (get)'} onClick={() => fetchItem(item.id)}>{item.name}</b>
+                            <button onClick={() => deleteItem(item.id)}>{'[D]elete (delete)'}</button>
                         </h4>
                         <div>
                             <span>
@@ -174,16 +211,18 @@ function App() {
 
 
             <Modal
-                isOpen={modalOpen}
-                onRequestClose={() => setModalOpen(!modalOpen)}
+                isOpen={modalData.open}
+                onRequestClose={() => setModalData({...modalData, open: !modalData.open})}
                 className={stylesModal.Modal}
                 overlayClassName={stylesModal.Overlay}
                 style={{content: {width: 280}}}>
                 <h3>Update Item</h3>
-                <UpdateForm>
+                <form onChange={(e) => {
+                    console.log(e)
+                }}>
                     <label>TYPE</label>
                     {' '}
-                    <select name={'type'}>
+                    <select name={'type'} value={modalData.item.type} onChange={(e) => setModalData({...modalData, item: {...modalData.item, type: e.target.value}})}>
                         <option>BOOK</option>
                         <option>CLOTHE</option>
                         <option>MUSIC</option>
@@ -195,10 +234,10 @@ function App() {
                     <br/><br/>
                     <label>NAME</label>
                     {' '}
-                    <input type={'text'} name={'name'} />   
+                    <input type={'text'} name={'name'} value={modalData.item.name} onChange={(e) => setModalData({...modalData, item: {...modalData.item, name: e.target.value}})}/>   
                     <hr />
                     <input type={"submit"} value={'[U]pdate (update)'} />
-                </UpdateForm>
+                </form>
             </Modal>
 
         </div>
