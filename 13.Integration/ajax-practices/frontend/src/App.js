@@ -5,7 +5,8 @@ import ReactModal from "react-modal";
 import styled from 'styled-components';
 import './assets/scss/App.scss';
 import * as stylesModal from './assets/scss/Modal.scss';
-import data from './assets/json/data.js';
+// import data from './assets/json/data.js';
+import serialize from 'form-serialize';
 
 const CreateForm = styled.form``;
 const UpdateForm = styled.form``;
@@ -16,8 +17,66 @@ const Item = styled.li``;
 ReactModal.setAppElement("body");
 
 function App() {
-    const [items, setItems] = useState(data);
+    const refCreateForm = useRef(null);
+    const [items, setItems] = useState(null);
     const [modalOpen, setModalOpen] = useState(false);
+
+    const addItem = async (item) => {
+        try{
+            const response = await fetch('/item', {
+                method: "post",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(item)
+            });
+
+            const jsonResult = await response.json();
+
+            if (!response.ok){
+                throw new Error(`${response.status} ${response.statusText}`)
+            }
+
+            setItems([jsonResult.data, ...items]);
+            refCreateForm.current.reset();
+        }
+        catch(err){
+            console.log(err);
+        }
+    }
+
+    const fetchItems = async () => {
+        try{
+            const response = await fetch('/item', {
+                method: "get",
+                headers: {
+                    'Accept': 'application/json',
+                },
+                body: null
+            });
+
+            if (!response.ok){
+                throw new Error(`${response.status} ${response.statusText}`)
+            }
+
+            const jsonResult = await response.json();
+
+            if (jsonResult.result === 'fail'){
+                throw new Error(`${jsonResult.message}`)
+            }
+
+            setItems(jsonResult.data);
+        }
+        catch(err){
+            console.log(err);
+        }
+        
+    };
+
+    useEffect(() => {
+        fetchItems();
+    }, []);
 
     return (
         <div id='App'>
@@ -25,7 +84,41 @@ function App() {
             <h1>AJAX: Restful API</h1>
 
             <div>
-                <CreateForm>
+                <form
+                    ref={refCreateForm}
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        console.log(e.target.type.value, e.target.name.value);
+                        try {
+                            /*
+                            const item = Array.from(e.target, (el) => {
+                                if(el.name !== '' && el.value === '') {
+                                    throw new Error(`validation ${el.name} is empty`);
+                                }
+
+                                return {name: el.name, value: el.value};
+                            })
+                            .filter(({name}) => name !== '')
+                            .reduce((res, {name, value}) => {
+                                res[name] = value;
+                                return res;
+                            }, {});
+                            */
+
+                            Array.from(e.target, (el) => {
+                                if(el.name !== '' && el.value === '') {
+                                    throw new Error(`validation ${el.name} is empty`);
+                                }
+                                return null;
+                            })
+
+                            // const queryString = serialize(e.target);
+                            const item = serialize(e.target, {hash: true})
+                            addItem(item);
+                        } catch(err) {
+                            console.log(err);
+                        }
+                    }}>
                     <select name={'type'}>
                         <option>BOOK</option>
                         <option>CLOTHE</option>
@@ -38,7 +131,7 @@ function App() {
                     {' '}
                     <input type={'text'} name={'name'} placeholder={'name'}/>
                     <input type={'submit'} value={'[C]reate (post)'}/>
-                </CreateForm>
+                </form>
                 <form>
                     <select name={'type'}>
                         <option>BOOK</option>
@@ -57,14 +150,14 @@ function App() {
             </div>
 
 
-            <h2 title={'[R]ead (get)'}>Items</h2>
+            <h2 title={'[R]ead (get)'} onClick={() => fetchItems()}>Items</h2>
 
 
             <ItemList>
                 {
                     items?.map((item, index) => <Item key={item.id}>
                         <h4>
-                            <b title={'[R]ead (get)'}>{item.name}</b>
+                            <b title={'[R]ead (get)'} onClick={() => setModalOpen(!modalOpen)}>{item.name}</b>
                             <button>{'[D]elete (delete)'}</button>
                         </h4>
                         <div>
@@ -82,7 +175,7 @@ function App() {
 
             <Modal
                 isOpen={modalOpen}
-                onRequestClose={() => setModalData(!modalOpen)}
+                onRequestClose={() => setModalOpen(!modalOpen)}
                 className={stylesModal.Modal}
                 overlayClassName={stylesModal.Overlay}
                 style={{content: {width: 280}}}>

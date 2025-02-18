@@ -3,6 +3,7 @@ package ajax.controller.error;
 import java.util.Optional;
 
 import org.springframework.boot.web.servlet.error.ErrorController;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +25,7 @@ public class WhitelabelController implements ErrorController {
 	@RequestMapping("/404")
 	public ResponseEntity<JsonResult<String>> _404() {
 		return ResponseEntity
-				.status(404)
+				.status(HttpStatus.NOT_FOUND)
 				.body(JsonResult.fail("unknown url"));
 	}
 
@@ -34,6 +35,8 @@ public class WhitelabelController implements ErrorController {
 		return ResponseEntity
 				.internalServerError()
 				.body(JsonResult.fail(errors));
+//				.status(HttpStatus.INTERNAL_SERVER_ERROR)
+				
 	}
 
 	@GetMapping
