@@ -2,6 +2,7 @@ package ajax.controller.api;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -25,7 +26,7 @@ public class ItemController {
 	
 	@PostMapping
 	public ResponseEntity<JsonResult<Item>> create(@RequestBody Item item) {
-		log.info("Request[POST /api, Content-Type: application/json][{}]", item);
+		log.info("Request[POST /item, Content-Type: application/json][{}]", item);
 		
 		Long maxId = Optional
 			.ofNullable(items.isEmpty() ? null : items.getFirst())
@@ -44,7 +45,7 @@ public class ItemController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<JsonResult<Item>> read(@PathVariable Long id) {
-		log.info("Request[GET /api/{}]", id);
+		log.info("Request[GET /item/{}]", id);
 		return ResponseEntity
 				.status(HttpStatus.OK)
 				.body(JsonResult.success(items.stream().filter(t -> t.getId() == id).findAny().orElse(null)));
@@ -52,15 +53,30 @@ public class ItemController {
 	
 	@GetMapping
 	public ResponseEntity<JsonResult<List<Item>>> read() {
-		log.info("Request[GET /api]");
+		log.info("Request[GET /item]");
 		return ResponseEntity
 				.status(HttpStatus.OK)
 				.body(JsonResult.success(items));
 	}
 	
+	@PutMapping("/{id}")
+	public ResponseEntity<JsonResult<Item>> update(@PathVariable Long id, Item item){
+		log.info("Request[PUT /item/{}, Content-Type: application/x-www-form-urlencoded][{}]", id, item);
+
+		Optional<Item> optionalItem = Optional.ofNullable(items.get(items.indexOf(item)));
+		optionalItem.ifPresent((Item t) -> {
+			t.setName(item.getName());
+			t.setType(item.getType());
+		});
+		
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(JsonResult.success(optionalItem.orElse(null)));
+	}
+	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<JsonResult<Long>> delete(@PathVariable Long id){
-		log.info("Request[DELETE /api/{}]", id);
+		log.info("Request[DELETE /item/{}]", id);
 		
 		return ResponseEntity
 				.status(HttpStatus.OK)

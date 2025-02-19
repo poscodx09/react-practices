@@ -54,7 +54,7 @@ function App() {
         }
     }
 
-    // 전체 아이템 조회회
+    // 전체 아이템 조회
     const fetchItems = async () => {
         try{
             const response = await fetch('/item', {
@@ -88,7 +88,6 @@ function App() {
         try{
             const response = await axios.get(`/item/${id}`);
             const jsonResult = response.data;
-            console.log(jsonResult.data);
 
             setModalData({
                 open: !modalData.open,
@@ -97,6 +96,28 @@ function App() {
         } catch(err){
             console.log(err.response ? `${err.response.status} ${err.response.data.message}` : err);
         } 
+    }
+
+    // 아이템 수정
+    const updateItem = async (item) => {
+        try{
+            const response = await axios.put(`/item/${item.id}`, new URLSearchParams(item).toString(), {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                }
+            });
+
+            const jsonResult = response.data;
+            const index = items.findIndex((item) => item.id === jsonResult.data.id);
+            setItems([...items.slice(0, index), jsonResult.data, ...items.slice(index+1)]);
+            setModalData({open: !modalData.open, item: {
+                id: -1, type: "", name: ""
+            }});
+        }
+        catch(err){
+            console.log(err);
+        }
     }
 
     // 아이템 삭제
@@ -217,8 +238,13 @@ function App() {
                 overlayClassName={stylesModal.Overlay}
                 style={{content: {width: 280}}}>
                 <h3>Update Item</h3>
-                <form onChange={(e) => {
-                    console.log(e)
+                <form onSubmit={(e) => {
+                    e.preventDefault();
+                    const item = serialize(e.target, {hash: true});
+                    console.log(item);
+                    console.log(modalData.item.id);
+                    console.log({id: modalData.item.id, ...item});
+                    updateItem({id: modalData.item.id, ...item});
                 }}>
                     <label>TYPE</label>
                     {' '}
