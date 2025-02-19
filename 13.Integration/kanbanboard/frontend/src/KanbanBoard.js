@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import './assets/scss/KanbanBoard.scss';
 import CardList from './CardList';
-import data from './assets/json/data';
 import axios from 'axios';
 
 
 function KanbanBoard() {
 
-    const [cards, setCards] = useState(data);
+    const [cards, setCards] = useState([]);
     const toDos = cards?.filter((item) => item?.status === 'ToDo');
     const doings = cards?.filter((item) => item?.status === 'Doing');
     const dones = cards?.filter((item) => item?.status === 'Done');
