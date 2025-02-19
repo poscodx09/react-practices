@@ -10,6 +10,7 @@ function CardList({title, cards}) {
 
         {cards && cards.map((item) =>
             <Card
+                key={item.no}
                 no={item.no}
                 title={item.title}
                 description={item.description}
