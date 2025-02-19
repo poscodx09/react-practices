@@ -3,7 +3,7 @@ import {_Card, Card_Title, Card_Title_Open} from './assets/scss/Card.scss';
 import TaskList from './TaskList'
 import axios from 'axios';
 
-export default function Card({no, title, description, handleCheckBox}) {
+export default function Card({no, title, description}) {
     const [open, setOpen] = useState(false);
     const [tasks, setTasks] = useState([]);
 
@@ -34,6 +34,21 @@ export default function Card({no, title, description, handleCheckBox}) {
         setTasks(filteredTasks)
       })
     }
+
+    // done 처리
+    const handleCheckBox = (taskNo, done) => {
+      axios.put(`/kanbanboard/task/${taskNo}?done=${done}`).then((res) => {
+        const changedTasks = tasks.map((task) => {
+          if (task.no === res.data.data.no){
+              task.done = res.data.data.done;
+              return task;
+          }
+          return task;
+        });
+        setTasks(changedTasks);
+      })
+    }
+
 
     return (
     <div className={_Card} key={no}>

@@ -44,23 +44,23 @@ function KanbanBoard() {
     // }
 
     // task done 처리
-    const handleCheckBox = (cardNo, taskNo) => {
-        const changedCards = cards.map((item) => {
-            if (item.no === cardNo){
-                item.tasks = item.tasks.map((task) => {
-                    if (task.no === taskNo){
-                        task.done = !task.done;
-                        return task;
-                    }
-                    return task;
-                });
-                return item;
-            }
-            return item;
-        });
+    // const handleCheckBox = (cardNo, taskNo) => {
+    //     const changedCards = cards.map((item) => {
+    //         if (item.no === cardNo){
+    //             item.tasks = item.tasks.map((task) => {
+    //                 if (task.no === taskNo){
+    //                     task.done = !task.done;
+    //                     return task;
+    //                 }
+    //                 return task;
+    //             });
+    //             return item;
+    //         }
+    //         return item;
+    //     });
 
-        setCards(changedCards);
-    }
+    //     setCards(changedCards);
+    // }
 
 
     useEffect(() => {
@@ -69,9 +69,9 @@ function KanbanBoard() {
 
     return (
         <>
-            <CardList title="To Do" cards={toDos} handleCheckBox={handleCheckBox}/>
-            <CardList title="Doing" cards={doings} handleCheckBox={handleCheckBox}/>
-            <CardList title="Done" cards={dones} handleCheckBox={handleCheckBox}/>
+            <CardList title="To Do" cards={toDos} />
+            <CardList title="Doing" cards={doings} />
+            <CardList title="Done" cards={dones} />
         </>
     );
 }
