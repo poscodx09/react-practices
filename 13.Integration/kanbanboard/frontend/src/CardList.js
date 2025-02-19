@@ -2,7 +2,7 @@ import React from 'react'
 import {Card_List} from './assets/scss/CardList.scss';
 import Card from './Card'
 
-function CardList({title, cards, handleAddTask, handleDeleteTask, handleCheckBox}) {
+function CardList({title, cards, handleDeleteTask, handleCheckBox}) {
 
   return (
     <div className={Card_List} key={title}>
@@ -14,8 +14,6 @@ function CardList({title, cards, handleAddTask, handleDeleteTask, handleCheckBox
                 title={item.title}
                 description={item.description}
                 status={item.status}
-                tasks={item.tasks}
-                handleAddTask={handleAddTask}
                 handleDeleteTask={handleDeleteTask}
                 handleCheckBox={handleCheckBox}
             />)}

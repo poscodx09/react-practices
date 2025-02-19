@@ -7,16 +7,18 @@ function TaskList({no, tasks, handleAddTask, handleDeleteTask, handleCheckBox}) 
     const [task, setTask] = useState({
         no: -1,
         name: '',
-        done: false
+        done: "N",
+        cardNo: no
     });
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter'){
-            handleAddTask(no, task);
+            handleAddTask(task);
             setTask({
                 no: -1,
                 name: '',
-                done: false
+                done: "N",
+                cardNo: no
             });
         }
     }
