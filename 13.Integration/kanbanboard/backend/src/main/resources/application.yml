@@ -1,11 +1,11 @@
 # spring configuration
 spring:
    application:
-      name: ajax-backend
+      name: kanbanboard-backend
    profiles:
       active: development
 
-
+  
 ---
 # common profile
 spring:
@@ -13,21 +13,25 @@ spring:
       static-path-pattern: /assets/**
    web:
       resources:
-         static-locations: [classpath:/assets/, file:/ajax-practices-uploads/]
-
+         static-locations: classpath:/assets/
    thymeleaf:      
       check-template-location: true
       enable-spring-el-compiler: true	  
       mode: HTML
       prefix: classpath:templates/      	  
       suffix : .html
+   datasource:
+      driver-class-name: org.h2.Driver
+      url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;MODE=MYSQL
+      username: sa
+      password:
+   h2:
+    console:
+      enabled: true
+      path: /h2-console      
 
-   servlet:
-      multipart:
-        enabled: true
-        max-file-size: 10485760
-        max-request-size: 104857600
-        file-size-threshold: 5242880
+mybatis:
+   config-location: classpath:mybatis/configuration.xml      
 
 server:
    error:
@@ -46,10 +50,7 @@ spring:
       activate:
          on-profile: development
 
-
    devtools:
-      restart:
-         enabled: true
       livereload:
          enabled: true
    thymeleaf:
@@ -67,11 +68,10 @@ logging:
 springdoc:
    api-docs:
       path: /api-docs
-   packagesToScan:
-      - ajax.controller.api
    swagger-ui:
       path: /swagger-ui
       operations-sorter: method
+      groups-order: DESC
       tags-sorter: alpha
 
 ---
@@ -81,12 +81,11 @@ spring:
       activate:
          on-profile: production
 
-
    thymeleaf:
       cache: true         
 
 server:
-   port: 8081
+   port: 8083
 
 logging:
    pattern:
@@ -100,5 +99,5 @@ logging:
       name: logs/${spring.application.name}.log
    level:
       root: WARN
-      ajax:
+      kanbanboard:
          exception: ERROR
