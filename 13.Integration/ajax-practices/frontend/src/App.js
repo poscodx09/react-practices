@@ -28,6 +28,34 @@ function App() {
         }
     })
 
+    const addItemWithImage = async (item) => {
+        
+        try {
+            // const formData = new FormData();
+            // formData.append("name", item.name);
+            // formData.append("type", item.type);
+            const formData = Object.keys(item).reduce((formData, key) => {
+                formData.append(key, item[key]);
+                return formData;
+            }, new FormData())
+    
+            const response = await axios.post('/item', formData, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'multipart/form-data',
+                }
+            })
+
+            const jsonResult = await response.data;
+
+            setItems([...items, jsonResult.data]);
+            refCreateForm.current.reset();
+
+        } catch(err){
+            console.log(err.response ? `${err.response.status} ${err.response.data.message}` : err);
+        } 
+    }
+
     // 아이템 추가
     const addItem = async (item) => {
         try{
@@ -190,7 +218,22 @@ function App() {
                     <input type={'text'} name={'name'} placeholder={'name'}/>
                     <input type={'submit'} value={'[C]reate (post)'}/>
                 </form>
-                <form>
+                <form onSubmit={(e) => {
+                    e.preventDefault();
+
+                    Array.from(e.target, (el) => {
+                        if(el.name !== '' && el.value === '') {
+                            throw new Error(`validation ${el.name} is empty`);
+                        }
+                        return null;
+                    })
+
+                    const item = serialize(e.target, {hash: true});
+                    item['file'] = e.target['file'].files[0];
+
+                    addItemWithImage(item);
+                    console.log(item);
+                }}>
                     <select name={'type'}>
                         <option>BOOK</option>
                         <option>CLOTHE</option>
@@ -223,7 +266,9 @@ function App() {
                                 <b>{index+1}</b>
                                 <i>{item.type}</i>
                             </span>
-                            <img src={item.image || '/assets/images/no-image.png'} />
+                            <ins style={{
+                                backgroundImage: `url(${item.image || '/assets/images/no-image.png'})`
+                            }} />
                         </div>
                     </Item>)
                 }

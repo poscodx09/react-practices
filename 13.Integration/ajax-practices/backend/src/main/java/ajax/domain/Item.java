@@ -10,6 +10,7 @@ import lombok.*;
 @RequiredArgsConstructor
 @EqualsAndHashCode(exclude = {"type", "name", "image"})
 public class Item {
+
 	@NonNull
 	private Long id;
 
@@ -21,4 +22,7 @@ public class Item {
 
 	private String image;
 
+	public Item(Long id) {
+		this.id = id;
+	}
 }
