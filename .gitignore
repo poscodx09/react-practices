@@ -16,7 +16,7 @@
 
 ## react
 **/bundle.js
-**/main.js
+# **/main.js
 
 # next.js
 **/.next/
