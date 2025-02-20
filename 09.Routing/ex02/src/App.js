@@ -7,7 +7,26 @@ import Error404 from '../../ex01/src/component/Error404';
 
 
 const Router = () => {
-    const [route, setRoute] = useState({page: '/'});
+
+    
+    const [route, setRoute] = useState({page: window.location.href.substring(window.location.href.lastIndexOf("/"))});
+    
+    const pushStateHandler = () => {
+        console.log(e);
+    };
+
+    useEffect(() => {
+        window.addEventListener('pushState', () => {
+            return () => {
+                window.removeEventListener('pushState', pushStateHandler);
+            }
+        });
+
+        return () => {
+
+        };
+    }, []);
+    
     let component = null;
 
     switch(route.page) {
@@ -32,13 +51,14 @@ const Router = () => {
 
 
 export default function App() {
+    
 
     const clickHandler = (e) => {
         e.preventDefault();
-
+        console.log(window.location.pathname);
         const url = e.target.href.substring(e.target.href.lastIndexOf("/"));
         window.history.pushState({page: url}, e.target.txt, url);
-
+        // window.dispatchEvent(new CustomEvent('pushState', {detail: }))
     }
 
     return (
